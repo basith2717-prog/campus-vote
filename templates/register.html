@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register | Mini Voting System</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+:root {
+    --bg-purple: #e0d4fc;
+    --card-gradient-top: #c4b5fd;
+}
+
+body {
+    background-color: var(--bg-purple);
+    font-family: 'Poppins', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.main-container {
+    background: linear-gradient(to bottom, var(--card-gradient-top) 0%, #ffffff 75%);
+    width: 100%;
+    max-width: 1000px;
+    min-height: 500px;
+    border-radius: 20px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.12);
+    position: relative;
+    overflow: hidden;
+}
+
+.main-container::after {
+    content: "";
+    position: absolute;
+    bottom: -100px;
+    left: -10%;
+    width: 120%;
+    height: 300px;
+    background: white;
+    border-radius: 50% 50% 0 0;
+}
+
+.content-body {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    padding: 80px 60px;
+    align-items: center;
+}
+
+.hero-text h1 {
+    font-size: 44px;
+    font-weight: 700;
+}
+
+.hero-text p {
+    color: #4b5563;
+    margin-bottom: 30px;
+}
+
+.cta-btn {
+    background: linear-gradient(to right, #6366f1, #a855f7);
+    color: white;
+    padding: 12px 35px;
+    border-radius: 30px;
+    border: none;
+    font-weight: 600;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.input-group-custom {
+    position: relative;
+}
+
+.input-group-custom i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #a5b4fc;
+}
+
+.input-group-custom input {
+    width: 100%;
+    padding: 14px 15px 14px 45px;
+    border-radius: 10px;
+    border: 1px solid #f3f4f6;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+    font-size: 13px;
+}
+
+.footer-links a {
+    text-decoration: none;
+    color: #9ca3af;
+    font-weight: 500;
+}
+</style>
+</head>
+
+<body>
+
+<div class="main-container">
+<div class="content-body">
+
+<div class="hero-text">
+    <h1>Mini Voting System</h1>
+    <p>Create your student account to vote.</p>
+    <button class="cta-btn" onclick="document.getElementById('registerForm').submit()">Register</button>
+</div>
+
+<div>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% for cat, msg in messages %}
+    <div class="alert alert-{{ cat }}">{{ msg }}</div>
+  {% endfor %}
+{% endwith %}
+
+<form method="POST" id="registerForm" class="form-container">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+    <div class="input-group-custom">
+        <i class="fas fa-id-card"></i>
+        <input type="text" name="college_id" placeholder="College ID" required>
+    </div>
+
+    <div class="input-group-custom">
+        <i class="fas fa-lock"></i>
+        <input type="password" name="password" placeholder="Password" required>
+    </div>
+
+    <div class="input-group-custom">
+        <i class="fas fa-lock"></i>
+        <input type="password" name="confirm" placeholder="Confirm Password" required>
+    </div>
+
+    <button type="submit" class="cta-btn w-100 mt-2">
+        Create Student Account
+    </button>
+
+    <div class="footer-links">
+        <a href="{{ url_for('login') }}">
+            <i class="fas fa-arrow-left"></i> Back to Login
+        </a>
+    </div>
+</form>
+</div>
+
+</div>
+</div>
+
+</body>
+</html>
