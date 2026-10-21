@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
+from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify, send_from_directory
 from flask_wtf import CSRFProtect
 from utils.db import get_conn
 from utils.security import hash_password, verify_password
@@ -27,9 +27,18 @@ ADMIN_PASS = os.environ.get("ADMIN_PASS") or "admin123"
 csrf = CSRFProtect(app)
 
 # ---------------- FILE UPLOAD CONFIG ----------------
-UPLOAD_FOLDER = os.path.join("static", "photos")
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif", "webp"}
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+if os.environ.get("VERCEL") or not os.access(os.path.abspath("static"), os.W_OK):
+    UPLOAD_FOLDER = os.path.join("/tmp", "photos")
+else:
+    UPLOAD_FOLDER = os.path.join("static", "photos")
+
+try:
+    os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+except Exception:
+    UPLOAD_FOLDER = os.path.join("/tmp", "photos")
+    os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 app.config["MAX_CONTENT_LENGTH"] = 5 * 1024 * 1024
 
@@ -2375,6 +2384,30 @@ def delete_student(college_id):
 @app.route("/api/position_titles/<int:stage>")
 def api_position_titles(stage):
     return jsonify(POSITION_TITLES.get(stage, []))
+
+
+# ---------------- CUSTOM STATIC PHOTO ROUTE ----------------
+@app.route("/static/photos/<path:filename>")
+def serve_custom_photos(filename):
+    static_dir = os.path.join(app.root_path, "static", "photos")
+    if os.path.exists(os.path.join(static_dir, filename)):
+        return send_from_directory(static_dir, filename)
+    tmp_dir = os.path.join("/tmp", "photos")
+    if os.path.exists(os.path.join(tmp_dir, filename)):
+        return send_from_directory(tmp_dir, filename)
+    default_img = os.path.join(static_dir, "default.png")
+    if os.path.exists(default_img):
+        return send_from_directory(static_dir, "default.png")
+    return "", 404
+
+
+# Auto-initialize DB on import if in serverless/production
+if os.environ.get("VERCEL") or os.environ.get("AWS_LAMBDA_FUNCTION_NAME"):
+    try:
+        init_db()
+        seed_data()
+    except Exception as e:
+        print(f"Serverless DB init note: {e}")
 
 
 # ---------------- MAIN ----------------
