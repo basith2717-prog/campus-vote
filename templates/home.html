@@ -651,6 +651,95 @@
             outline-offset: 3px;
         }
 
+        /* Dedicated Candidate & Department Module Showcase */
+        .module-showcase-card {
+            background: #ffffff;
+            border-radius: 22px;
+            padding: 32px 28px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+            border: 1px solid #e2e8f0;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .module-showcase-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(79, 70, 229, 0.15);
+        }
+
+        .module-accent-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+        }
+
+        .accent-candidate {
+            background: linear-gradient(90deg, #f59e0b, #ea580c);
+        }
+
+        .accent-dept {
+            background: linear-gradient(90deg, #3b82f6, #06b6d4);
+        }
+
+        .module-icon-wrap {
+            width: 58px;
+            height: 58px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            margin-bottom: 18px;
+        }
+
+        .icon-wrap-candidate {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .icon-wrap-dept {
+            background: #e0f2fe;
+            color: #0284c7;
+        }
+
+        .module-feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 13px;
+            color: #4b5563;
+            margin-bottom: 10px;
+        }
+
+        .module-feature-item i {
+            margin-top: 3px;
+            font-size: 14px;
+        }
+
+        .nav-badge-link {
+            background: linear-gradient(135deg, #f59e0b, #ea580c) !important;
+            color: white !important;
+            padding: 6px 14px !important;
+            border-radius: 999px !important;
+            font-weight: 600 !important;
+            box-shadow: 0 4px 12px rgba(234, 88, 12, 0.25);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-badge-link:hover {
+            opacity: 0.92;
+            transform: translateY(-1px);
+        }
+
         @media (max-width: 900px) {
             .page-shell {
                 width: min(100% - 20px, 760px);
@@ -766,18 +855,34 @@
 </a>
 
         <div class="nav-links">
-    <a class="nav-active"
-       href="{{ url_for('home') }}"
-       aria-current="page">
-        Home
-    </a>
+            <a class="nav-active"
+               href="{{ url_for('home') }}"
+               aria-current="page">
+                Home
+            </a>
 
-    <a href="{{ url_for('results') }}">Results</a>
+            <a href="{{ url_for('departments') }}">
+                <i class="fa-solid fa-building-columns me-1"></i>Departments
+            </a>
 
-    <a href="{{ url_for('login') }}">Student Login</a>
+            <a href="{{ url_for('department_login') }}" class="nav-badge-link" style="background:#e0e7ff;color:#3730a3;border-color:#c7d2fe;">
+                <i class="fa-solid fa-graduation-cap me-1"></i>Dept Portal
+            </a>
 
-    <a href="{{ url_for('admin') }}">Admin Login</a>
-</div>
+            <a href="{{ url_for('candidates') }}">
+                <i class="fa-solid fa-users me-1"></i>Candidates
+            </a>
+
+            <a href="{{ url_for('candidate_register') }}" class="nav-badge-link">
+                <i class="fa-solid fa-user-plus"></i> Candidate Register
+            </a>
+
+            <a href="{{ url_for('results') }}">Results</a>
+
+            <a href="{{ url_for('login') }}">Voter Login</a>
+
+            <a href="{{ url_for('admin') }}">Admin Login</a>
+        </div>
     </nav>
 
 
@@ -798,7 +903,7 @@
 
                 <p>
                     VoteEase makes college elections simple and accessible.
-                    Sign in with your college credentials, cast your vote,
+                    Sign in with your voter credentials, cast your vote,
                     and follow election results with a clear and reliable
                     voting experience.
                 </p>
@@ -806,10 +911,18 @@
                 <div class="hero-actions">
                     <a href="{{ url_for('login') }}" class="primary-btn">
                         <i class="fa-solid fa-right-to-bracket" aria-hidden="true"></i>
-                        Student Login
+                        Voter Login
                     </a>
 
-                    
+                    <a href="{{ url_for('department_login') }}" class="secondary-btn" style="border-color: #6366f1; color: #4338ca; background: #e0e7ff;">
+                        <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i>
+                        Department Portal
+                    </a>
+
+                    <a href="{{ url_for('candidate_register') }}" class="secondary-btn" style="border-color: #f59e0b; color: #b45309; background: #fffbeb;">
+                        <i class="fa-solid fa-user-check" aria-hidden="true"></i>
+                        Candidate Register (75% Req.)
+                    </a>
                 </div>
             </div>
 
@@ -829,7 +942,7 @@
 
                     <div class="mini-stat">
                         <i class="fa-solid fa-user-check" aria-hidden="true"></i>
-                        <span>Student authentication</span>
+                        <span>Voter authentication</span>
                     </div>
 
                     <div class="mini-stat">
@@ -844,6 +957,120 @@
                 </div>
             </div>
 
+        </div>
+    </section>
+
+
+    <!-- SEPARATE CANDIDATE & DEPARTMENT MODULES SECTION -->
+    <section class="section" id="campus-modules" style="padding-top: 20px; padding-bottom: 50px;">
+        <div class="section-heading">
+            <span class="badge bg-primary-subtle text-primary border border-primary px-3 py-1 rounded-pill small mb-2 d-inline-block">
+                <i class="fa-solid fa-layer-group me-1"></i> Core Campus Portals
+            </span>
+            <h2>Candidate &amp; Department Modules</h2>
+            <p>Directly access dedicated institutional options: Candidate Self-Registration (with attendance check &amp; OTP) and Academic Department directories.</p>
+        </div>
+
+        <div class="row g-4">
+            <!-- CANDIDATE MODULE CARD -->
+            <div class="col-md-6">
+                <div class="module-showcase-card">
+                    <div class="module-accent-bar accent-candidate"></div>
+                    <div>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div class="module-icon-wrap icon-wrap-candidate">
+                                <i class="fa-solid fa-user-tie"></i>
+                            </div>
+                            <span class="badge bg-warning-subtle text-dark border border-warning px-3 py-1 rounded-pill fw-bold">
+                                75% Attendance Required
+                            </span>
+                        </div>
+
+                        <h3 class="fs-4 fw-bold text-dark mb-2">🎓 Candidate Module</h3>
+                        <p class="text-muted small mb-3">
+                            Complete portal for prospective student candidates to check eligibility, complete OTP verification, choose categorized positions, and file nominations.
+                        </p>
+
+                        <div class="mb-4">
+                            <div class="module-feature-item">
+                                <i class="fa-solid fa-circle-check text-success"></i>
+                                <span><strong>75% Attendance Check:</strong> Real-time minimum 75% academic attendance check required before nomination submission.</span>
+                            </div>
+                            <div class="module-feature-item">
+                                <i class="fa-solid fa-shield-halved text-warning"></i>
+                                <span><strong>OTP Generation &amp; Verification:</strong> 6-digit one-time password security confirmation.</span>
+                            </div>
+                            <div class="module-feature-item">
+                                <i class="fa-solid fa-id-badge text-primary"></i>
+                                <span><strong>Position Categories:</strong> Executive Council, Department Rep, Cultural &amp; Sports Secretary.</span>
+                            </div>
+                            <div class="module-feature-item">
+                                <i class="fa-solid fa-users-viewfinder text-info"></i>
+                                <span><strong>Candidate Directory:</strong> Browse approved candidates, view campaign manifestos, and see voter bios.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2 flex-wrap pt-3 border-top">
+                        <a href="{{ url_for('candidate_register') }}" class="primary-btn" style="background: linear-gradient(to right, #ea580c, #f59e0b); flex: 1; text-align: center;">
+                            <i class="fa-solid fa-user-plus me-1"></i> Register as Candidate
+                        </a>
+                        <a href="{{ url_for('candidates') }}" class="secondary-btn" style="flex: 1; text-align: center;">
+                            <i class="fa-solid fa-users me-1"></i> Browse Candidates
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DEPARTMENT MODULE CARD -->
+            <div class="col-md-6">
+                <div class="module-showcase-card">
+                    <div class="module-accent-bar accent-dept"></div>
+                    <div>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div class="module-icon-wrap icon-wrap-dept">
+                                <i class="fa-solid fa-building-columns"></i>
+                            </div>
+                            <span class="badge bg-info-subtle text-primary border border-info px-3 py-1 rounded-pill fw-bold">
+                                Academic Faculties
+                            </span>
+                        </div>
+
+                        <h3 class="fs-4 fw-bold text-dark mb-2">🏢 Department Module</h3>
+                        <p class="text-muted small mb-3">
+                            Explore college academic departments, faculty representations, student enrollment numbers, and departmental elections.
+                        </p>
+
+                        <div class="mb-4">
+                            <div class="module-feature-item">
+                                <i class="fa-solid fa-laptop-code text-primary"></i>
+                                <span><strong>Academic Divisions:</strong> Computer Science, Electronics, Mechanical, Civil &amp; AI/DS.</span>
+                            </div>
+                            <div class="module-feature-item">
+                                <i class="fa-solid fa-chart-simple text-info"></i>
+                                <span><strong>Student Quotas:</strong> Capacity limits, enrolled voter percentages, and seat allocations.</span>
+                            </div>
+                            <div class="module-feature-item">
+                                <i class="fa-solid fa-landmark text-secondary"></i>
+                                <span><strong>Department Reps:</strong> Tailored representation addressing department-specific concerns.</span>
+                            </div>
+                            <div class="module-feature-item">
+                                <i class="fa-solid fa-sliders text-success"></i>
+                                <span><strong>Admin Controls:</strong> Add, edit, and organize departments via the administration console.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2 flex-wrap pt-3 border-top">
+                        <a href="{{ url_for('departments') }}" class="primary-btn" style="background: linear-gradient(to right, #0284c7, #2563eb); flex: 1; text-align: center;">
+                            <i class="fa-solid fa-building-columns me-1"></i> Explore Departments
+                        </a>
+                        <a href="{{ url_for('department_login') }}" class="secondary-btn" style="border-color:#6366f1;color:#4338ca;background:#e0e7ff; flex: 1; text-align: center;">
+                            <i class="fa-solid fa-graduation-cap me-1"></i> Dept Coordinator Portal
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -1068,8 +1295,8 @@
                         <div class="feature-copy">
                             <h3>Password Hashing</h3>
                             <p>
-                                Student passwords are stored using the
-                                application's password-hashing utility.
+                                Voter passwords are securely stored using modern
+                                cryptographic password hashing.
                             </p>
                         </div>
                     </div>
@@ -1083,10 +1310,10 @@
                             <i class="fa-solid fa-database" aria-hidden="true"></i>
                         </div>
                         <div class="feature-copy">
-                            <h3>One Vote Per Student</h3>
+                            <h3>One Vote Per Voter</h3>
                             <p>
-                                The database enforces a unique student and
-                                election vote record.
+                                The database enforces a unique voter and
+                                election vote record per tier.
                             </p>
                         </div>
                     </div>
@@ -1151,10 +1378,10 @@
                             <i class="fa-solid fa-sliders" aria-hidden="true"></i>
                         </div>
                         <div class="feature-copy">
-                            <h3>Admin Management</h3>
+                            <h3>Department &amp; Admin Management</h3>
                             <p>
-                                Manage elections, candidates, and student
-                                records through the admin interface.
+                                Departments govern voters and candidates,
+                                while admin manages overall institutional departments.
                             </p>
                         </div>
                     </div>

@@ -173,10 +173,11 @@ CREATE TABLE votes (
 
 ## 🧪 Testing the Voting Flow
 
-1. Visit **`http://127.0.0.1:5000/`** — browse the hero landing page and active election card.
-2. Click **"Student Login"** and sign in using `STUDENT01` / `vote123`.
-3. You will be redirected to **`/vote`** with the live countdown timer.
-4. Select a candidate card (observe glowing highlight effect) and click **"Cast Vote"**.
-5. You are taken to **`/thanks`** confirming your vote is securely logged. Attempting to vote again is prevented.
-6. Visit **`/admin`** (password: `admin123`) to view updated vote counts, real-time turnout, or conclude the election.
-7. Visit **`/results`** to see the winner announcement and final vote breakdown!
+1. Visit **`http://127.0.0.1:5000/`** — browse the hero landing page and active election cards.
+2. Click **"Voter Login"** and sign in using `STUDENT01` / `vote123`.
+3. You will be redirected to **`/vote`** with the multi-stage ballot booths.
+4. Select a candidate card and click **"Cast Vote"**.
+5. You are taken to **`/thanks`** confirming your vote is securely logged. Attempting to vote again in that tier is prevented.
+6. Visit **`/department/login`** (choose e.g. "Computer Science (CSE)", password: `dept123`) to approve candidates, register new voters, and run department elections!
+7. Visit **`/admin`** (password: `admin123`) to manage all academic departments, coordinator keys, and global election tiers.
+8. Visit **`/results`** to see official winners and transparent vote tallies!

@@ -14,11 +14,15 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color:#0a192f;">
   <div class="container">
-    <a class="navbar-brand fw-bold" href="{{ url_for('home') }}">VoteEase</a>
-    <div class="d-flex gap-2">
+    <a class="navbar-brand fw-bold" href="{{ url_for('home') }}">🗳️ VoteEase</a>
+    <div class="d-flex gap-2 flex-wrap">
       <a class="nav-link text-light" href="{{ url_for('home') }}">Home</a>
+      <a class="nav-link text-light" href="{{ url_for('departments') }}">Departments</a>
+      <a class="nav-link text-warning fw-semibold" href="{{ url_for('department_login') }}">Dept Portal</a>
+      <a class="nav-link text-light" href="{{ url_for('candidates') }}">Candidates</a>
+      <a class="nav-link text-warning fw-bold" href="{{ url_for('candidate_register') }}">Candidate Register</a>
       <a class="nav-link text-light" href="{{ url_for('results') }}">Results</a>
-      <a class="nav-link text-light" href="{{ url_for('login') }}">Student Login</a>
+      <a class="nav-link text-light" href="{{ url_for('login') }}">Voter Login</a>
       <a class="nav-link text-light" href="{{ url_for('admin') }}">Admin</a>
     </div>
   </div>

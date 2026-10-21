@@ -193,9 +193,21 @@ body {
         <a href="{{ url_for('home') }}" class="text-decoration-none fw-bold fs-5" style="color: var(--purple);">
             <i class="fas fa-check-to-slot"></i> VoteEase
         </a>
-        <span class="badge bg-light text-primary border px-3 py-2 rounded-pill ms-2">
-            <i class="fas fa-user-graduate"></i> {{ student.college_id }} ({{ student.department }})
-        </span>
+        <div class="d-inline-flex align-items-center gap-2 bg-white border px-3 py-1 rounded-pill ms-2 shadow-sm">
+            <img src="{{ url_for('static', filename='photos/' + (student.photo or 'default.png')) }}"
+                 onerror="this.src='{{ url_for('static', filename='photos/default.png') }}';"
+                 class="rounded-circle" style="width:28px;height:28px;object-fit:cover;" alt="Avatar">
+            <span class="fw-bold text-dark small">{{ student.college_id }}</span>
+            <span class="badge bg-primary rounded-pill px-2 py-1" style="font-size:0.75rem;">
+                <i class="fas fa-user-check me-1"></i>{{ student.role or 'Student Elector' }}
+            </span>
+            {% if student.class_section %}
+            <span class="badge bg-info-subtle text-info border border-info rounded-pill px-2 py-1" style="font-size:0.72rem;">
+                {{ student.class_section }}
+            </span>
+            {% endif %}
+            <small class="text-muted" style="font-size:0.78rem;">{{ student.department }}</small>
+        </div>
     </div>
     <div class="d-flex gap-2">
         <a href="{{ url_for('results') }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">
@@ -217,7 +229,7 @@ body {
         <div>
             <h6 class="fw-bold mb-1 text-primary">Multi-Stage Democratic Governance Pipeline</h6>
             <p class="small text-muted mb-0">
-                Students who win the <strong>Step 1: Class Election (CR)</strong> automatically qualify for the <strong>Step 2: Department Election</strong>, leading up to the <strong>University Council</strong>. You may cast one ballot in each category you are eligible for!
+                Candidates who win the <strong>Step 1: Class Election (CR)</strong> automatically qualify for the <strong>Step 2: Department Election</strong>, leading up to the <strong>University Council</strong>. You may cast one ballot in each category you are eligible for!
             </p>
         </div>
     </div>

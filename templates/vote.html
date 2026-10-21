@@ -123,7 +123,7 @@ body {
 {% for c in candidates %}
 <div class="col-md-4 mb-4">
 <label style="width:100%;">
-<input type="radio" name="candidate" value="{{ c.id }}" hidden>
+<input type="radio" name="candidate" value="{{ c.id }}" style="position:absolute;opacity:0;pointer-events:none;">
 
 <div class="card p-3 text-center h-100 d-flex flex-column justify-content-between">
   <div>
@@ -132,6 +132,23 @@ body {
            style="width:100%;height:100%;object-fit:cover;">
     </div>
     <h5 class="mt-3 fw-bold mb-1">{{ c.name }}</h5>
+
+    {% if c.position_title %}
+      <div class="mb-1">
+        <span class="badge px-2 py-1 rounded-pill small d-inline-block"
+              style="background: linear-gradient(135deg,#6366f1,#a855f7); color:white; font-size:0.72rem; letter-spacing:0.3px;">
+          <i class="fas fa-medal me-1"></i>{{ c.position_title }}
+        </span>
+      </div>
+    {% endif %}
+
+    {% if c.department %}
+      <div class="mb-2">
+        <span class="badge bg-light text-secondary border px-2 py-1 rounded-pill" style="font-size:0.7rem;">
+          <i class="fas fa-building-columns me-1"></i>{{ c.department }}
+        </span>
+      </div>
+    {% endif %}
 
     {% if c.promotion_status %}
       <span class="badge bg-warning-subtle text-dark border border-warning px-2 py-1 rounded-pill small mb-2 d-inline-block">
@@ -171,23 +188,37 @@ body {
 </div>
 
 <script>
-const radios = document.querySelectorAll("input[name='candidate']");
+const cardLabels = document.querySelectorAll("label:has(input[name='candidate'])");
 const voteBtn = document.getElementById("voteBtn");
 
-radios.forEach(radio => {
+document.querySelectorAll("label").forEach(label => {
+  const radio = label.querySelector("input[name='candidate']");
+  if (!radio) return;
+
+  label.addEventListener("click", () => {
+    radio.checked = true;
+    document.querySelectorAll(".card").forEach(c => {
+      c.classList.remove("selected", "blur");
+    });
+
+    const card = label.querySelector(".card");
+    if (card) {
+      card.classList.add("selected");
+    }
+
+    document.querySelectorAll(".card").forEach(c => {
+      if (c !== card) c.classList.add("blur");
+    });
+
+    if (voteBtn) {
+      voteBtn.disabled = false;
+      voteBtn.style.opacity = "1";
+      voteBtn.style.cursor = "pointer";
+    }
+  });
+
   radio.addEventListener("change", () => {
-    document.querySelectorAll(".card").forEach(c=>{
-      c.classList.remove("selected","blur");
-    });
-
-    const selected = radio.closest("label").querySelector(".card");
-    selected.classList.add("selected");
-
-    document.querySelectorAll(".card").forEach(c=>{
-      if(c!==selected) c.classList.add("blur");
-    });
-
-    voteBtn.disabled = false;
+    label.click();
   });
 });
 </script>
